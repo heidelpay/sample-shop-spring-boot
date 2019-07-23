@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{shop/layout}">
+<head>
+</head>
+<body>
+
+	<div layout:fragment="content">
+
+
+
+		<div id="carouselExampleIndicators" class="carousel slide my-4"
+			data-ride="carousel">
+			<ol class="carousel-indicators">
+				<li data-target="#carouselExampleIndicators" data-slide-to="0"
+					class="active"></li>
+				<li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+				<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+			</ol>
+			
+			
+			
+			<div class="carousel-inner" role="listbox">
+				
+				<div th:each="product,iter : ${featured}" class="carousel-item" th:classappend="${iter.index == 1} ? active : ''">
+					<img class="d-block img-fluiddd img-responsive" th:src="${product.teaserUrl}" style="width:100%; max-height:300px;"
+						th:alt="${product.title}">
+				</div>
+				
+			</div>
+			<a class="carousel-control-prev" href="#carouselExampleIndicators"
+				role="button" data-slide="prev"> <span
+				class="carousel-control-prev-icon" aria-hidden="true"></span> <span
+				class="sr-only">Previous</span>
+			</a> <a class="carousel-control-next" href="#carouselExampleIndicators"
+				role="button" data-slide="next"> <span
+				class="carousel-control-next-icon" aria-hidden="true"></span> <span
+				class="sr-only">Next</span>
+			</a>
+		</div>
+
+
+
+		<div class="row">
+		
+		<div th:each="product : ${products}" class="col-lg-4 col-md-6 mb-4">
+              <div class="card h-100">
+                <a href="#"><img class="card-img-top" th:src="${product.imageUrl}" alt=""></a>
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <a href="#" th:text="${product.title}"></a>
+                  </h4>
+                  <h5 th:text="${product.price} + ' ' + ${@basketHolder.get().currency}"></h5>
+                  <p class="card-text" th:text="${product.description}"></p>
+				<form th:action="@{/basket/add}" method="POST">
+					<input name="productId" type="hidden" th:value="${product.id}">
+					<button type="submit" class="btn btn-primary">Add to basket</button>
+				</form>
+                  
+                </div>
+                
+                
+                <div class="card-footer">
+                  <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+                </div>
+              </div>
+            </div>
+		
+		</div>
+
+
+	</div>
+
+</body>
+</html>

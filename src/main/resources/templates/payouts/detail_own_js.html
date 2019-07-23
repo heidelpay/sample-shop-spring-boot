@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{shop/layout}">
+<head>
+</head>
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row">
+
+			<div class="col-lg-4 col-sm-12">
+				<div class="card">
+					<h5 class="card-header">Own Javascript</h5>
+
+					<div class="card-body">
+						<div class="text-note">Sample IBAN: DE89370400440532013000</div>
+						<form id="payment-form" class="heidelpayUI form" action="#"
+							th:action="@{/payouts}" method="POST" novalidate>
+							<input type="hidden" name="customerId" th:value="${customer.id}">
+							<input type="hidden" name="paymentType" id="ref_payment_type">
+
+							<div class="row">
+								<div class="col-12 form-group">
+									<label for="iban">IBAN</label> <input class="form-control"
+										id="iban" name="iban" placeholder="DE89370400440532013000">
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-12 form-group">
+									<label for="amount">Payout amount</label> <input type="number"
+										class="form-control" id="amount" name="amount"
+										placeholder="Amount">
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-12">
+									<div class="field">
+										<button id="payment-button-id" 
+											class="btn btn-primary btn-block" type="submit">Payout</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-8 col-sm-12">
+
+				<h4 th:text="${customer.firstname + ' ' + customer.lastname}"></h4>
+				<div class="row">
+					<th:block
+						th:include="payouts/fragments :: customer_history(customer=${customer})"></th:block>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<th:block layout:fragment="scripts">
+
+		<script type="text/javascript" th:inline="javascript">
+
+			var publicKey = [[${publicKey}]];
+		   var url = [[${api}]] + '/types/sepa-direct-debit';
+		  // basic auth where the public key is the username, without password
+		  var authentication = 'Basic ' + btoa(publicKey + ':');
+		
+		  var paymentForm = document.getElementById('payment-form');
+			
+		  paymentForm.addEventListener('submit', function(e) {
+			    e.preventDefault();
+			    var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+			    xhr.open('POST', url);
+			    xhr.onreadystatechange = function() {
+			        if (xhr.readyState>3 && xhr.status==201) { 
+			        	var result = JSON.parse(xhr.responseText);
+			 			
+			        	document.getElementById('ref_payment_type').value = result.id
+			        	paymentForm.submit();
+			 			
+			        }
+			    };
+			    var params = "iban=" + document.getElementById("iban").value;
+			    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+			    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			    xhr.setRequestHeader('Authorization', authentication)
+			    xhr.send(params);
+			    return xhr;
+		  });
+		
+		</script>
+	</th:block>
+
+</body>
+</html>

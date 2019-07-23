@@ -1,0 +1,21 @@
+<script th:fragment="paypage(paypage)" type="text/javascript">
+	var token = "[[${paypage.id}]]";
+	var successUrl = "[[${paypage.returnUrl}]]"
+	
+	var checkout = new window.checkout( token );
+     checkout.init().then(function() {
+            checkout.open();
+            checkout.abort(function() {
+                console.log('Popup closed')
+            })
+            checkout.success(function(data) {
+            	window.location = successUrl;    
+            })
+            checkout.error(function(error) {
+                console.log('error', error)
+            })
+        }).catch(function(error) {
+            console.log('error', error.customerMessage)
+        });
+</script>
+

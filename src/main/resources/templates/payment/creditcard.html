@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{shop/layout}">
+<head>
+</head>
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row">
+
+			<div class="col-4">
+				<div class="card">
+					<h5 class="card-header">Creditcard</h5>
+
+					<div class="card-body">
+
+						<form id="payment-form" class="heidelpayUI form" action="#"
+							th:action="@{/payment/charge}" method="POST" novalidate>
+
+							<input type="hidden" name="paymentType" id="ref_payment_type">
+							<div class="row">
+								<div class="col-12">
+									<div class="field">
+										<div id="card-element-id-number" class="heidelpayInput"></div>
+									</div>
+
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-6">
+									<div id="card-element-id-expiry" class="heidelpayInput"></div>
+								</div>
+								<div class="col-6">
+
+									<div id="card-element-id-cvc" class="heidelpayInput"></div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-12">
+									<div class="field">
+										<button id="payment-button-id" disabled
+											class="btn btn-primary btn-block" type="submit">Pay</button>
+									</div>
+
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="col-8">
+				<th:block th:include="shop/fragments :: basket"></th:block>
+			</div>
+		</div>
+
+	</div>
+
+	<th:block layout:fragment="scripts">
+
+		<script type="text/javascript" th:inline="javascript">
+
+		var publicKey = [[${publicKey}]];
+		 var heidelpay = new heidelpay(publicKey);
+		  
+		var Card = heidelpay.Card();
+		  
+
+		  Card.create('number', {
+		    containerId: 'card-element-id-number',
+		    onlyIframe: false
+		  });
+		  
+		  Card.create('expiry', {
+		    containerId: 'card-element-id-expiry',
+		    onlyIframe: false
+		  });
+		
+		  Card.create('cvc', {
+		    containerId: 'card-element-id-cvc',
+		    onlyIframe: false
+		  });
+		  
+		  var paymentForm = document.getElementById('payment-form');
+		  var paymentButton = document.getElementById('payment-button-id');
+		  var paymentFields = {};
+
+		  Card.addEventListener('change', function(e) {
+		    paymentFields[e.type] = e.success;
+		    paymentButton.disabled = !(paymentFields.number && paymentFields.expiry && paymentFields.cvc);
+		  });
+
+		  paymentForm.addEventListener('submit', function(e) {
+			      e.preventDefault();
+			      paymentButton.disabled = true;
+				   Card.createResource()
+			      .then(function(data) {
+			    	  paymentButton.disabled = true;
+			    	  document.getElementById('ref_payment_type').value = data.id
+			   		document.getElementById("payment-form").submit();
+			      })
+			      .catch(function(error) {
+			        console.log(error);
+			      });
+		  });
+		
+		</script>
+	</th:block>
+
+</body>
+</html>

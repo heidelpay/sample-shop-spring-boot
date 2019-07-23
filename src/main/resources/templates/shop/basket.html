@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{shop/layout}">
+<head>
+</head>
+<body>
+
+	<div layout:fragment="content">
+		<div class="row">
+			<div class="col-12">
+								
+				
+				<th:block th:include="shop/fragments :: basket"></th:block>
+								
+
+				<div class="row pay-options float-right">
+					<a th:href="@{/payment/paypage}"
+						class="btn btn-primary float-right">Pay with PayPage</a>
+					<button type="button" class="btn btn-primary float-right"
+						onclick="pay()">Pay with Payment Request Api</button>
+
+					<div class="dropdown">
+						<button class="btn btn-primary dropdown-toggle" type="button"
+							id="dropdownMenuButton" data-toggle="dropdown"
+							aria-haspopup="true" aria-expanded="false">Pay with...</button>
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+							<a class="dropdown-item" th:href="@{/payment/creditcard}">Credit-Card</a> <a
+								class="dropdown-item" th:href="@{/payment/sepa}">Sepa</a>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+
+		<th:block th:if="${paypage}">
+			<script type="text/javascript"
+				src="https://static.heidelpay.com/v1/checkout.js"></script>
+
+			<script th:if="${paypage}" type="text/javascript"
+				th:replace="payment/fragments :: paypage(paypage=${paypage})"></script>
+		</th:block>
+
+	</div>
+
+
+<th:block layout:fragment="scripts">
+
+	<script type="text/javascript" th:inline="javascript">
+		
+		var card = [[${card}]];
+		var own = [[${own}]];
+	</script>
+
+	<script src="/js/heidelpay_payment.js"></script>
+	<script src="/js/payment_api.js"></script>
+	
+	<script th:if="${message}" type="text/javascript">
+		var msg = "DEBUG: [[${message}]]"
+		console.log(msg);
+	</script>	
+
+</th:block>
+
+</body>
+</html>

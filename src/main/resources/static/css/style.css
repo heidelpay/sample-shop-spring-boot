@@ -1,0 +1,77 @@
+
+body {
+  padding-top: 54px;
+}
+
+.bg-dark {
+	background-color:#05164d!important;
+}
+
+a, a:hover {
+	color:#05164d;
+}
+
+
+
+.btn-primary {
+	background-color:#05164d !important;
+	border-color:#05164d !important;
+}
+
+.pay-options .btn {
+	margin:10px;
+	
+}
+
+.card-footer .btn {
+	margin-top:6px;
+	margin-bottom:6px;
+}
+.heidelpayUI.form .row {
+	margin-top:10px;
+}
+
+.heidelpayUI.form .row button{
+	margin-top:20px;
+}
+
+.heidelpayUI.form .row label{
+	font-size:0.8em;
+}
+
+.text-note {
+	font-size:0.7em;
+}
+
+.payout-list .col-6 {
+	padding:6px;
+}
+
+.payout-card {
+	padding:6px;
+}
+
+.payout-card .list-group {
+	border: #dfdfdf 1px solid;
+}
+.payout-card .list-group li{
+	font-size:0.8em;
+}
+
+.payout-list .row .col-sm-12{
+	margin-top:6px;
+	margin-bottom:6px;
+}
+
+@media (min-width: 992px) {
+  body {
+    padding-top: 56px;
+  }
+}
+
+
+.wrapper {
+	margin-top:24px;
+	margin-bottom:24px;
+	min-height:600px;
+}

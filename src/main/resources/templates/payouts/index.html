@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{shop/layout}">
+<head>
+</head>
+<body>
+
+	<div layout:fragment="content">
+		<div class="payout-list">
+			<div class="row" >
+				<div class="col-lg-6 col-sm-12" th:each="customer : ${customers}">
+					<div class="card">
+						<div class="card-header"
+							th:text="${customer.firstname + ' ' +  customer.lastname}"></div>
+						<div class="card-body">
+							<div th:text="${customer.payouts.size() + ' Payouts'}"></div>
+							<div th:text="${customer.calculatePayoutSum() + ' total payouts'}"></div>
+						</div>
+						<div class="card-footer">
+							<a class="btn btn-secondary" th:href="@{'payouts/' + ${customer.id} + '?noHeidelpayUi=true&serverSide=true'}">Payout no JS</a>
+							<a class="btn btn-secondary" th:href="@{'payouts/' + ${customer.id} + '?noHeidelpayUi=true&serverSide=false'}">Payout Own JS</a>
+							<a class="btn btn-secondary" th:href="@{'payouts/' + ${customer.id}}">Payout hdp JS</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+</html>

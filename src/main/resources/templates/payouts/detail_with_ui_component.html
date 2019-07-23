@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{shop/layout}">
+<head>
+</head>
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row">
+
+			<div class="col-lg-4 col-sm-12">
+				<div class="card">
+					<h5 class="card-header">Sepa direct debit</h5>
+
+					<div class="card-body">
+						<div class="text-note">Sample IBAN: DE89370400440532013000</div>
+						<form id="payment-form" class="heidelpayUI form" action="#"
+							th:action="@{/payouts}" method="POST" novalidate>
+							<input type="hidden" name="customerId" th:value="${customer.id}">
+							<input type="hidden" name="paymentType" id="ref_payment_type">
+							<div class="row">
+								<div class="col-12">
+									<div id="sepa-IBAN" class="field"></div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-12 form-group">
+									<label for="amount">Payout amount</label> <input type="number"
+										class="form-control" id="amount" name="amount" placeholder="Amount">
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-12">
+
+									<div class="field">
+										<button id="payment-button-id" disabled
+											class="btn btn-primary btn-block" type="submit">Payout</button>
+									</div>
+
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-8 col-sm-12">
+				
+				<h4 th:text="${customer.firstname + ' ' + customer.lastname}"></h4>
+				<div class="row">
+				<th:block th:include="payouts/fragments :: customer_history(customer=${customer})"></th:block>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<th:block layout:fragment="scripts">
+
+		<script type="text/javascript" th:inline="javascript">
+
+		var publicKey = [[${publicKey}]];
+		 var heidelpay = new heidelpay(publicKey);
+		  
+		 var Sepa = heidelpay.SepaDirectDebit()
+	
+		 Sepa.create('sepa-direct-debit', {
+		  containerId: 'sepa-IBAN'
+		});
+		 
+		  var paymentForm = document.getElementById('payment-form');
+		  var paymentButton = document.getElementById('payment-button-id');
+		  var paymentFields = {};
+
+		 Sepa.addEventListener('change', function(e) {
+		      if (e.success) {
+                  paymentButton.disabled = false;
+              } else {
+                  paymentButton.disabled = true;
+              }
+		  });
+
+		  paymentForm.addEventListener('submit', function(e) {
+			      e.preventDefault();
+			      paymentButton.disabled = true;
+				   Sepa.createResource()
+			      .then(function(data) {
+			    	  paymentButton.disabled = true;
+			    	  document.getElementById('ref_payment_type').value = data.id
+			   		document.getElementById("payment-form").submit();
+			      })
+			      .catch(function(error) {
+			        console.log(error);
+			      });
+		  });
+		
+		</script>
+	</th:block>
+
+</body>
+</html>

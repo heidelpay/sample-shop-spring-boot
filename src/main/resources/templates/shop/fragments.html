@@ -1,0 +1,56 @@
+<th:block th:fragment="category_menu">
+
+	<h3 th:text="${@shopInfo.name}"></h3>
+	<div class="list-group">
+		<a th:each="category : ${@shopInfo.categories}"
+			class="list-group-item" href="#" th:text="${category}"></a>
+	</div>
+</th:block>
+
+<script th:fragment="has_payment_request_api">
+check_availability();
+</script>
+
+
+<th:block th:fragment="basket">
+<th:block th:include="shop/fragments :: show_basket(basket=${@basketHolder.get()})"></th:block>
+</th:block>
+
+<th:block th:fragment="show_basket(basket)">
+
+<h3>Your Basket</h3>
+
+				<table th:if="${basket.items.size() > 0}"
+					class="table table-striped">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Product</th>
+							<th scope="col">Price</th>
+							<th scope="col">Amount</th>
+							<th scope="col">Total</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="basket-row"
+							th:each="item,iter : ${basket.items}"
+							th:data-title="${item.title}" th:data-total="${item.total}">
+							<th scope="row" th:text="${iter.index}"></th>
+							<td class="basket-item-title" th:text="${item.title}"></td>
+							<td th:text="${item.price}"></td>
+							<td th:text="${item.amount}"></td>
+							<td th:text="${item.total}"></td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div class="row">
+					<h4 class="col-lg-6 col-md-6 mb-6">Total:</h4>
+					<div class="col-lg-6 col-md-6 mb-6">
+						<p class="float-right"
+							th:text="${basket.calculateSum()} + ' ' + ${basket.currency}"></p>
+					</div>
+				</div>
+
+
+</th:block>

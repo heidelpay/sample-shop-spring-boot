@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{shop/layout}">
+<head>
+</head>
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row">
+
+			<div class="col-4">
+				<div class="card">
+					<h5 class="card-header">Sepa direct debit</h5>
+
+					<div class="card-body">
+						<div class="text-note">Sample IBAN: DE89370400440532013000</div>
+						<form id="payment-form" class="heidelpayUI form" action="#"
+							th:action="@{/payment/charge}" method="POST" novalidate>
+
+							<input type="hidden" name="paymentType" id="ref_payment_type">
+							<div class="row">
+								<div class="col-12">
+									<div id="sepa-IBAN" class="field"></div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-12">
+
+									<div class="field">
+										<button id="payment-button-id" disabled
+											class="btn btn-primary btn-block" type="submit">Pay</button>
+									</div>
+
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="card-footer text-muted">
+						<div class="text-note">
+						By signing this mandate form, you authorise <span th:text="${@shopInfo.merchant}"></span> to send instructions to your bank to debit your account and your bank to debit your account in accordance with the instructions from <span th:text="${@shopInfo.merchant}"></span>. 
+						</div>
+						<div class="text-note">
+							Note: As part of your rights, you are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited. Your rights regarding this SEPA mandate are explained in a statement that you can obtain from your bank. 
+						</div>
+						<div class="text-note">
+							In case of refusal or rejection of direct debit payment I instruct my bank irrevocably to inform <span th:text="${@shopInfo.merchant}"></span> or any third party upon request about my name, address and date of birth.
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-8">
+				<th:block th:include="shop/fragments :: basket"></th:block>
+			</div>
+		</div>
+
+	</div>
+
+	<th:block layout:fragment="scripts">
+
+		<script type="text/javascript" th:inline="javascript">
+
+		var publicKey = [[${publicKey}]];
+		 var heidelpay = new heidelpay(publicKey);
+		  
+		 var Sepa = heidelpay.SepaDirectDebit()
+	
+		 Sepa.create('sepa-direct-debit', {
+		  containerId: 'sepa-IBAN'
+		});
+		 
+		  var paymentForm = document.getElementById('payment-form');
+		  var paymentButton = document.getElementById('payment-button-id');
+		  var paymentFields = {};
+
+		 Sepa.addEventListener('change', function(e) {
+		      if (e.success) {
+                  paymentButton.disabled = false;
+              } else {
+                  paymentButton.disabled = true;
+              }
+		  });
+
+		  paymentForm.addEventListener('submit', function(e) {
+			      e.preventDefault();
+			      paymentButton.disabled = true;
+				   Sepa.createResource()
+			      .then(function(data) {
+			    	  paymentButton.disabled = true;
+			    	  document.getElementById('ref_payment_type').value = data.id
+			   		document.getElementById("payment-form").submit();
+			      })
+			      .catch(function(error) {
+			        console.log(error);
+			      });
+		  });
+		
+		</script>
+	</th:block>
+
+</body>
+</html>

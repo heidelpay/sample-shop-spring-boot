@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{shop/layout}">
+<head>
+
+
+
+</head>
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row">
+
+			<div class="col-5">
+				<div class="card">
+					<h5 class="card-header">Payment Details</h5>
+
+					<div class="card-body">
+
+						<div class="row" th:if="${customer}">
+							<h6 class="col-6">Shippingaddress:</h6>
+							<div class="col-6">
+
+								<p th:text="${customer.firstname + ' ' + customer.lastname}"></p>
+								<p th:text="${customer.billingAddress.street}"></p>
+								<p
+									th:text="${customer.billingAddress.zip + ' ' + customer.billingAddress.city}"></p>
+							</div>
+						</div>
+						<div class="row">
+							<h6 class="col-6">Reference:</h6>
+							<div class="col-6">
+								<p th:text="${payment.id}"></p>
+								<p th:text="${payment.paymentType.id}"></p>
+								<p th:text="${payment.paymentType.typeUrl}"></p>
+								<p th:text="${payment.paymentState}"></p>
+							</div>
+						</div>
+
+
+					</div>
+
+				</div>
+			</div>
+			<div class="col-7">
+				<th:block th:include="shop/fragments :: show_basket(basket = ${basket})"></th:block>
+			</div>
+		</div>
+
+	</div>
+
+</body>
+</html>

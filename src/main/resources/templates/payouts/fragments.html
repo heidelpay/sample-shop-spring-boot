@@ -1,0 +1,45 @@
+<th:block th:fragment="customer_history(customer)">
+
+
+	<div class="col-lg-6 col-sm-12 payout-card" th:each="payout : ${customer.payouts}">
+
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item">
+					<div class="row">
+						<h6 class="col-4">Date</h6>
+						<div class="col-8" th:text="${payout.creationDate}"></div>
+					</div>
+				</li>
+				<li class="list-group-item">
+					<div class="row">
+						<h6 class="col-4">Amount</h6>
+						<div class="col-8"
+							th:text="${payout.amount + ' ' + payout.currency}"></div>
+					</div>
+				</li>
+				<li class="list-group-item">
+					<div class="row">
+						<h6 class="col-4">Detail</h6>
+						<div class="col-8" th:text="${payout.detail}"></div>
+					</div>
+				</li>
+
+				<li class="list-group-item">
+
+					<div class="row">
+						<h6 class="col-4">Reference</h6>
+						<div class="col-8" th:text="${payout.reference}"></div>
+					</div>
+				</li>
+				<li class="list-group-item">
+
+					<div class="row">
+						<h6 class="col-4">Type</h6>
+						<div class="col-8" th:text="${payout.paymentType}"></div>
+					</div>
+				</li>
+			</ul>
+
+	</div>
+
+</th:block>
