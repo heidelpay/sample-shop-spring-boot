@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{shop/layout}">
+<head>
+</head>
+<body>
+
+	<div layout:fragment="content">
+
+		<h3 class="row col-12"
+			th:text="${customer.firstname} + ' ' + ${customer.lastname}"></h3>
+
+		<div class="row spaced-row">
+
+			<div class="col-lg-8 col-sm-12">
+				<h5>Registration</h5>
+				<p class="text-note">The Registration of any payment-type allows
+					to implement use cases for recurring payments, such as subscription
+					models.</p>
+				<p class="text-note">Registering a payment-type, e.g for a
+					registered customer, makes it possible to realize one-click
+					payments</p>
+				<h5>Save</h5>
+				<p class="text-note">Saving the payment-type without
+					registration will store the reference. It will not be registered
+					for any further payments, but could be queried for displaying
+					purpose, or could be used for payouts.</p>
+			</div>
+
+			<div class="col-lg-4 col-sm-12">
+				<div class="card">
+					<p class="card-header">Register Credit-Card for Recurring
+						Payment</p>
+
+					<div class="card-body">
+						<div class="text-note">Sample Card: 4444 3333 2222 1111</div>
+						<form id="payment-form-cc" class="heidelpayUI form" action="#"
+							th:action="@{'/paymenttype/register/' + ${customer.id}}"
+							method="POST" novalidate>
+
+							<input type="hidden" name="paymentTypeReference"
+								id="ref_payment_type_cc"> <input type="hidden"
+								name="paymentType" value="Credit Card">
+
+
+							<div class="row">
+								<div class="col-12">
+									<div class="field">
+										<div id="card-element-id-number" class="heidelpayInput"></div>
+									</div>
+
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-6">
+									<div id="card-element-id-expiry" class="heidelpayInput"></div>
+								</div>
+								<div class="col-6">
+
+									<div id="card-element-id-cvc" class="heidelpayInput"></div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-12">
+									<div class="form-group custom-control custom-checkbox">
+										<input type="checkbox" class="custom-control-input"
+											id="doregister" name="doregister"> <label
+											class="custom-control-label" for="doregister">Register
+											for Payment</label>
+									</div>
+								</div>
+							</div>
+
+
+							<div class="row">
+								<div class="col-12">
+									<div class="field">
+										<button id="payment-button-cc" disabled
+											class="btn btn-primary btn-block" type="submit">Save</button>
+									</div>
+								</div>
+							</div>
+
+						</form>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+		<div class="row spaced-row">
+
+			<div class="col-lg-12 col-sm-12">
+				<div class="card-deck">
+					<div class="card">
+						<p class="card-header">Register SEPA for Payout</p>
+
+						<div class="card-body">
+							<div class="text-note">Sample IBAN: DE89370400440532013000</div>
+							<form id="payment-form-sepa" class="heidelpayUI form" action="#"
+								th:action="@{'/paymenttype/register/' + ${customer.id}}"
+								method="POST" novalidate>
+
+								<input type="hidden" name="paymentTypeReference"
+									id="ref_payment_type_sepa"> <input type="hidden"
+									name="paymentType" value="SEPA">
+
+
+								<div class="row">
+									<div class="col-12 form-group">
+										<div id="sepa-IBAN" class="field"></div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-12">
+										<div class="field">
+											<button id="payment-button-sepa" disabled
+												class="btn btn-primary btn-block" type="submit">Save</button>
+										</div>
+									</div>
+								</div>
+
+							</form>
+						</div>
+					</div>
+
+
+					<div class="card">
+						<p class="card-header">Register SEPA Without Javascript</p>
+
+						<div class="card-body">
+							<div class="text-note">Sample IBAN: DE89370400440532013000</div>
+							<form id="payment-form-sepa-server" class="heidelpayUI form"
+								action="#"
+								th:action="@{'/paymenttype/register/' + ${customer.id}} + '/iban'"
+								method="POST" novalidate>
+
+
+								<div class="row">
+									<div class="col-12 form-group">
+										<label for="iban">IBAN</label> <input class="form-control"
+											id="iban" name="iban" placeholder="DE89370400440532013000">
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-12">
+										<div class="field">
+											<button id="payment-button-sepa-server"
+												class="btn btn-primary btn-block" type="submit">Save</button>
+										</div>
+									</div>
+								</div>
+
+							</form>
+						</div>
+					</div>
+
+
+					<div class="card">
+
+						<p class="card-header">Register SEPA with own Javascript</p>
+						<div class="card-body">
+							<div class="text-note">Sample IBAN: DE89370400440532013000</div>
+							<form id="payment-form-sepa-own" class="heidelpayUI form"
+								action="#"
+								th:action="@{'/paymenttype/register/' + ${customer.id}}"
+								method="POST" novalidate>
+
+
+								<input type="hidden" name="paymentTypeReference"
+									id="ref_payment_type_sepa_own"> <input type="hidden"
+									name="paymentType" value="SEPA">
+
+
+								<div class="row">
+									<div class="col-12 form-group">
+										<label for="iban">IBAN</label> <input class="form-control"
+											id="iban-own" name="iban" placeholder="DE89370400440532013000">
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-12">
+										<div class="field">
+											<button id="payment-sepa-button-own"
+												class="btn btn-primary btn-block" type="submit">Save</button>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<th:block layout:fragment="scripts">
+
+			<script type="text/javascript" th:inline="javascript">
+
+		var publicKey = [[${publicKey}]];
+		 var heidelpay = new heidelpay(publicKey);
+		  
+		 var Sepa = heidelpay.SepaDirectDebit()
+	
+		 Sepa.create('sepa-direct-debit', {
+		  containerId: 'sepa-IBAN'
+		});
+		 
+		  var paymentForm = document.getElementById('payment-form-sepa');
+		  var paymentButton = document.getElementById('payment-button-sepa');
+		  var paymentFields = {};
+
+		 Sepa.addEventListener('change', function(e) {
+		      if (e.success) {
+                  paymentButton.disabled = false;
+              } else {
+                  paymentButton.disabled = true;
+              }
+		  });
+
+		  paymentForm.addEventListener('submit', function(e) {
+			      e.preventDefault();
+			      paymentButton.disabled = true;
+				   Sepa.createResource()
+			      .then(function(data) {
+			    	  paymentButton.disabled = true;
+			    	  document.getElementById('ref_payment_type_sepa').value = data.id
+			   		document.getElementById("payment-form-sepa").submit();
+			      })
+			      .catch(function(error) {
+			        console.log(error);
+			      });
+		  });
+
+		  
+		  
+		  
+			var Card = heidelpay.Card();
+			  
+
+			  Card.create('number', {
+			    containerId: 'card-element-id-number',
+			    onlyIframe: false
+			  });
+			  
+			  Card.create('expiry', {
+			    containerId: 'card-element-id-expiry',
+			    onlyIframe: false
+			  });
+			
+			  Card.create('cvc', {
+			    containerId: 'card-element-id-cvc',
+			    onlyIframe: false
+			  });
+			  
+			  var paymentFormCC = document.getElementById('payment-form-cc');
+			  var paymentButtonCC = document.getElementById('payment-button-cc');
+			  var paymentFieldsCC = {};
+
+			  Card.addEventListener('change', function(e) {
+			    paymentFieldsCC[e.type] = e.success;
+			    paymentButtonCC.disabled = !(paymentFieldsCC.number && paymentFieldsCC.expiry && paymentFieldsCC.cvc);
+			  });
+
+			  paymentFormCC.addEventListener('submit', function(e) {
+				      e.preventDefault();
+				      paymentButtonCC.disabled = true;
+					   Card.createResource()
+				      .then(function(data) {
+				    	  paymentButtonCC.disabled = true;
+				    	  document.getElementById('ref_payment_type_cc').value = data.id
+				   		document.getElementById("payment-form-cc").submit();
+				      })
+				      .catch(function(error) {
+				        console.log(error);
+				      });
+			  });
+			
+
+		  // SEPA with own javascript
+		  
+		  var url = [[${api}]] + '/types/sepa-direct-debit';
+		  // basic auth where the public key is the username, without password
+		  var authentication = 'Basic ' + btoa(publicKey + ':');
+		
+		  var paymentForm = document.getElementById('payment-form-sepa-own');
+			
+		  paymentForm.addEventListener('submit', function(e) {
+			    e.preventDefault();
+			    var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+			    xhr.open('POST', url);
+			    xhr.onreadystatechange = function() {
+			        if (xhr.readyState>3 && xhr.status==201) { 
+			        	var result = JSON.parse(xhr.responseText);
+			 			
+			        	document.getElementById('ref_payment_type_sepa_own').value = result.id
+			        	paymentForm.submit();
+			 			
+			        }
+			    };
+			    var params = "iban=" + document.getElementById("iban-own").value;
+			    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+			    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			    xhr.setRequestHeader('Authorization', authentication)
+			    xhr.send(params);
+			    return xhr;
+		  });
+		  
+		</script>
+
+
+
+
+		</th:block>
+</body>
+</html>

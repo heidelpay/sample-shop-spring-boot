@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{shop/layout}">
+<head>
+</head>
+<body>
+
+	<div layout:fragment="content">
+		<div class="payout-list">
+
+			<div class="row">
+				<div class="col-lg-6 col-sm-12">
+					<form action="/customer/" method="POST">
+						<div class="card">
+							<div class="card-header">New Customer</div>
+							<div class="card-body">
+								<div class="form-group">
+									<label for="firstname">Firstname</label> <input
+										class="form-control" id="firstname" name="firstname" placeholder="Firstname...">
+								</div>
+								<div class="form-group">
+									<label for="firstname">Lastname</label> <input
+										class="form-control" id="lastname" name="lastname" placeholder="Lastname...">
+								</div>
+							</div>
+							<div class="card-footer">
+								<button type="submit" class="btn btn-primary float-right">Create</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+
+
+			<div class="card-deck two-cards">
+				<!--  <div class="col-lg-6 col-sm-12" th:each="customer : ${customers}">  -->
+					<div class="card" th:each="customer : ${customers}">
+						<div class="card-header">
+							<div class="row">
+								<h5 class="col-8"
+									th:text="${customer.firstname + ' ' +  customer.lastname}"></h5>
+								<div class="col-4">
+									<form method="POST"
+										th:action="@{'customer/' + ${customer.id} + '/delete'}">
+										<button class="btn btn-link float-right" type="submit">Delete</button>
+									</form>
+								</div>
+							</div>
+
+						</div>
+						<div class="card-body">
+							<h6 th:if="${customer.paymentReferences.size() > 0}">Registered instruments</h6>
+							<div class="row" th:each="ref : ${customer.paymentReferences}">
+								<div class="col-5 text-note"  th:text="${ref.details}"></div>
+								<div class="col-3 text-note" th:if="${ref.registered}">registered</div>
+								<div class="col-3 text-note" th:if="${!ref.registered}">not registered</div>
+								
+								<a th:href="@{'/paymenttype/register/' + ${customer.id} + '/deregister/' + ${ref.id}}" class="col-3 btn btn-link text-note" >delete</a>
+								
+							</div>
+						</div>
+						<div class="card-footer">
+							<a class="btn btn-link float-right"
+								th:href="@{'paymenttype/register/' + ${customer.id}}">Create Payment-Instrument</a> 
+						</div>
+					</div>
+			<!-- 	</div> -->
+			</div>
+		</div>
+	</div>
+
+
+</body>
+</html>
