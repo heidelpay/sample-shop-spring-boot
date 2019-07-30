@@ -29,7 +29,7 @@ All integration samples are based on the Java-SDK to be found on [github](https:
 
 ### heidelpay UI-Components
 The heidelpay UI-Components are a rich set of customizable UI-Components for the Web-Integration. Using the heidelpay UI-Components might save a lot of time while bringing the best user experience to the browser. A demonstration of the components can be found [here](https://static.heidelpay.com/demo/).
-However, while it is recommended to use those components, the API can be used completely without. In the Payouts section we illustrate how to use the Api by implementing an own javascript, or completely without using javascript by utilizing the server side. 
+However, while it is recommended to use those components, the API can be used completely without. In the Payouts and Registration section we illustrate how to use the Api by implementing an own javascript, or completely without using javascript by utilizing the server side. 
 
 ### W3C Payment Request Api
 
@@ -45,6 +45,8 @@ Basic configuration of the Paypage is done within the `ConfiguredPaypage`class. 
 ### Native Integration
 Currently credit-card payment and SEPA direct debit is supported within the sample shop. As you can see, integrating new payment methods is almost a frontend task. While there are dedicated templates for the input of the payment methods, the server-side handling of the payments for all methods is done in the generic `PaymentController`'s `charge`action.
 
+## Registration
+Payment-types could be registered at heidelpay for recurring payments, e.g. in case of subscription models. The `PaymentTypeController`implements the options for registrating/storing the payment-type references for later any later use. The `paymenttyppe/register.html`template illustrates how to register with heidelpay's UI-Components, with a custom Javascript, or via server-2-server communication.
 
 ## Payouts
 Payouts are a very specific use case where money gets transfered to the customer. 

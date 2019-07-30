@@ -1,8 +1,8 @@
 package com.heidelpay.samples.shop.model;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -31,7 +31,13 @@ public class Customer {
 	
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval=true)
 	@JoinColumn(name = "customer", unique = false, nullable = true)
-	private List<PayoutReference> payouts = new ArrayList<>();
+	private Set<PayoutReference> payouts = new HashSet<>();
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval=true)
+	@JoinColumn(name = "customer", unique = false, nullable = true)
+	private Set<PaymentReference> paymentReferences = new HashSet<>();
+	
+	
 	
 	public String getFirstname() {
 		return firstname;
@@ -57,11 +63,11 @@ public class Customer {
 		this.id = id;
 	}
 
-	public List<PayoutReference> getPayouts() {
+	public Set<PayoutReference> getPayouts() {
 		return payouts;
 	}
 
-	public void setPayouts(List<PayoutReference> references) {
+	public void setPayouts(Set<PayoutReference> references) {
 		this.payouts.clear();
 		if(references == null || references.size() == 0) {
 			return;
@@ -82,7 +88,7 @@ public class Customer {
 	
 	public void addPayout(PayoutReference reference) {
 		if(this.payouts == null) {
-			this.payouts = new ArrayList<>();
+			this.payouts = new HashSet<>();
 		}
 		reference.setCustomer(this);
 		this.payouts.add(reference);
@@ -96,5 +102,35 @@ public class Customer {
 			}
 		}
 		return sum;
+	}
+	
+	public void addPaymentReference(PaymentReference reference) {
+		if(this.payouts == null) {
+			this.payouts = new HashSet<>();
+		}
+		reference.setCustomer(this);
+		this.paymentReferences.add(reference);
+	}
+
+	public Set<PaymentReference> getPaymentReferences() {
+		return paymentReferences;
+	}
+
+	public void setPaymentReference(Set<PaymentReference> references) {
+		this.paymentReferences.clear();
+		if(references == null || references.size() == 0) {
+			return;
+		} else {
+			for(PaymentReference reference : references) {
+				reference.setCustomer(this);
+				this.paymentReferences.add(reference);
+			}
+		}
+		
+	}
+	public void removePaymentReference(PaymentReference reference) {
+		if(this.paymentReferences != null) {
+			this.paymentReferences.remove(reference);
+		}
 	}
 }

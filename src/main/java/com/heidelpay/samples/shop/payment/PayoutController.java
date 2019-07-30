@@ -135,7 +135,8 @@ public class PayoutController {
 			customerDao.saveAndFlush(customer);
 	
 			return new RedirectView("/payouts");
-			
 	}
+	
+	
 
 }
